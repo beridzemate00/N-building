@@ -1,86 +1,150 @@
+import { useMemo, useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowRight, ShieldCheck } from "lucide-react";
-import { SITE } from "../../../data/site";
+import { Minus, Plus, ShieldCheck } from "lucide-react";
+
 import { Container } from "../../common/Container";
 import { Badge } from "../../common/Badge";
 import { BuildingScene } from "../../../three/BuildingScene";
-import { scrollToId } from "../../../utils/scroll";
 import { StatsStrip } from "./StatsStrip";
+import { useI18n } from "../../../i18n/useI18n";
 
-const fadeUp = {
-  hidden: { opacity: 0, y: 14 },
-  show: { opacity: 1, y: 0 },
-};
+const clamp = (v: number, min: number, max: number) =>
+  Math.max(min, Math.min(max, v));
 
 export function HeroSection() {
+  const { c } = useI18n();
+
+  const [scale, setScale] = useState(1);
+
+  const inc = () =>
+    setScale((s) => clamp(Number((s + 0.08).toFixed(2)), 0.8, 1.4));
+
+  const dec = () =>
+    setScale((s) => clamp(Number((s - 0.08).toFixed(2)), 0.8, 1.4));
+
+  const reset = () => setScale(1);
+
+  const fadeUp = useMemo(
+    () => ({
+      hidden: { opacity: 0, y: 14 },
+      show: { opacity: 1, y: 0 },
+    }),
+    []
+  );
+
+  const scrollToServices = () => {
+    const el = document.getElementById("services");
+    if (!el) return;
+    const y = el.getBoundingClientRect().top + window.scrollY - 84;
+    window.scrollTo({ top: y, behavior: "smooth" });
+  };
+
   return (
-    <section id="top" className="pb-10 pt-10 md:pb-16 md:pt-16">
+    <section id="hero" className="pt-12 md:pt-16">
       <Container>
-        <div className="grid items-center gap-10 md:grid-cols-2">
+        {/* ✅ more balanced alignment */}
+        <div className="grid gap-12 md:grid-cols-2 md:items-start">
+          {/* LEFT */}
           <motion.div
             variants={fadeUp}
             initial="hidden"
-            whileInView="show"
-            viewport={{ once: true, margin: "-80px" }}
-            transition={{ duration: 0.5 }}
+            animate="show"
+            transition={{ duration: 0.35 }}
+            className="pt-2"
           >
-            <Badge>{SITE.locationShort}</Badge>
+            <Badge>{c.brand.locationShort}</Badge>
 
-            <h1 className="mt-4 text-3xl font-semibold tracking-tight text-slate-900 md:text-5xl">
-              Build smarter with
-              <span className="text-brand-600"> {SITE.name}</span>
+            <h1 className="mt-4 text-4xl font-extrabold tracking-tight text-slate-900 md:text-5xl">
+              {c.hero.headline}{" "}
+              <span className="text-brand-600">{c.brand.name}</span>
             </h1>
 
-            <p className="mt-4 max-w-xl text-sm text-slate-600 md:text-base">
-              Blueprints to handover — we deliver durable, modern spaces with
-              clear timelines, transparent budgets, and a safety-first culture.
+            <p className="mt-4 max-w-xl text-base text-slate-600">
+              {c.hero.description}
             </p>
 
-            <div className="mt-6 flex flex-wrap items-center gap-3">
-              <button
-                onClick={() => scrollToId("projects")}
-                className="inline-flex items-center gap-2 rounded-xl bg-brand-500 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-600"
-              >
-                View projects
-                <ArrowRight className="h-4 w-4" />
+            <div className="mt-6 flex flex-wrap gap-3">
+              <button className="rounded-xl bg-brand-500 px-5 py-3 text-sm font-semibold text-white hover:bg-brand-600">
+                {c.hero.primaryCta}
               </button>
+
               <button
-                onClick={() => scrollToId("services")}
-                className="rounded-xl border border-brand-100 bg-white px-5 py-3 text-sm font-semibold text-brand-700 transition hover:bg-brand-50"
+                onClick={scrollToServices}
+                className="rounded-xl border border-brand-100 bg-white px-5 py-3 text-sm font-semibold text-slate-800 hover:bg-brand-50"
               >
-                Our services
+                {c.hero.secondaryCta}
               </button>
             </div>
 
-            <StatsStrip />
+            {/* ✅ bigger, cleaner stats */}
+            <div className="mt-8">
+              <StatsStrip />
+            </div>
           </motion.div>
 
-          <motion.div
-            variants={fadeUp}
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true, margin: "-80px" }}
-            transition={{ duration: 0.55, delay: 0.05 }}
-            className="relative"
-          >
-            <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-brand-50 via-white to-brand-100" />
+          {/* RIGHT - 3D CARD */}
+          {/* ✅ pushed down on desktop */}
+          <div className="relative md:mt-10">
+            {/* ✅ bigger card heights */}
+            <div
+              className="
+                relative overflow-hidden rounded-3xl border border-brand-100 bg-white shadow-soft
+                h-[320px] sm:h-[360px] md:h-[430px]
+              "
+            >
+              <BuildingScene scale={scale} />
 
-            <div className="relative h-[320px] md:h-[420px]">
-              <BuildingScene />
+              {/* ✅ ZOOM CONTROLS */}
+              <div className="absolute right-3 top-3 flex items-center gap-1 rounded-xl border border-brand-100 bg-white/90 p-1 backdrop-blur">
+                <button
+                  onClick={dec}
+                  className="inline-flex h-8 w-8 items-center justify-center rounded-lg hover:bg-brand-50"
+                  title="Zoom out"
+                >
+                  <Minus className="h-4 w-4" />
+                </button>
+
+                <button
+                  onClick={reset}
+                  className="px-2 text-[10px] font-semibold text-slate-600 hover:text-brand-700"
+                  title="Reset"
+                >
+                  {Math.round(scale * 100)}%
+                </button>
+
+                <button
+                  onClick={inc}
+                  className="inline-flex h-8 w-8 items-center justify-center rounded-lg hover:bg-brand-50"
+                  title="Zoom in"
+                >
+                  <Plus className="h-4 w-4" />
+                </button>
+              </div>
+
+              {/* 3D hint */}
+              <div className="absolute bottom-3 right-4 text-[10px] font-medium text-slate-500">
+                {c.hero.hint3d}
+              </div>
             </div>
 
-            <div className="absolute -bottom-6 -left-4 hidden rounded-2xl border border-brand-100 bg-white p-4 shadow-md md:block">
-              <div className="flex items-center gap-3">
+            {/* ✅ Safety pill tuned placement */}
+            <div className="absolute -bottom-7 left-4 hidden w-[300px] rounded-2xl border border-brand-100 bg-white p-4 shadow-soft md:block">
+              <div className="flex items-start gap-3">
                 <div className="rounded-xl bg-brand-50 p-2">
-                  <ShieldCheck className="h-5 w-5 text-brand-700" />
+                  <ShieldCheck className="h-4 w-4 text-brand-700" />
                 </div>
-                <div className="text-sm font-semibold">Safety & QA first</div>
-              </div>
-              <div className="mt-1 text-xs text-slate-600">
-                Standards-driven site management
+                <div>
+                  <div className="text-sm font-semibold text-slate-900">
+                    {c.hero.safetyTitle}
+                  </div>
+                  <div className="mt-0.5 text-xs text-slate-600">
+                    {c.hero.safetyText}
+                  </div>
+                </div>
               </div>
             </div>
-          </motion.div>
+          </div>
+          {/* END RIGHT */}
         </div>
       </Container>
     </section>

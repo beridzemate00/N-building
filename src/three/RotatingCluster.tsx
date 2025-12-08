@@ -1,9 +1,12 @@
 import { useMemo, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import { Float, RoundedBox } from "@react-three/drei";
+import * as THREE from "three";
 
-export function RotatingCluster() {
-  const group = useRef<import("three").Group | null>(null);
+type RotatingClusterProps = { scale?: number };
+
+export function RotatingCluster({ scale = 1 }: RotatingClusterProps) {
+  const group = useRef<THREE.Group | null>(null);
 
   useFrame((_, delta) => {
     if (group.current) group.current.rotation.y += delta * 0.18;
@@ -13,7 +16,7 @@ export function RotatingCluster() {
     () =>
       Array.from({ length: 7 }).map((_, i) => ({
         id: i,
-        h: 1.3 + (i * 0.33) % 1.7,
+        h: 1.3 + i * 0.33,
         w: 0.75 + (i % 3) * 0.12,
         d: 0.75 + ((i + 1) % 3) * 0.12,
         x: -1.5 + i * 0.5,
@@ -24,9 +27,12 @@ export function RotatingCluster() {
   );
 
   return (
-    <group ref={group} position={[0, -0.05, 0]} scale={1.15}>
+    <group
+      ref={group}
+      position={[0, -0.05, 0]}
+      scale={[scale, scale, scale]}
+    >
       <Float speed={1.0} rotationIntensity={0.15} floatIntensity={0.12}>
-        {/* Towers */}
         {towers.map((t) => (
           <RoundedBox
             key={t.id}
@@ -42,16 +48,6 @@ export function RotatingCluster() {
             />
           </RoundedBox>
         ))}
-
-        {/* Base slab */}
-        <RoundedBox
-          args={[4.2, 0.2, 1.5]}
-          radius={0.07}
-          smoothness={8}
-          position={[0, 0.1, 0]}
-        >
-          <meshStandardMaterial color="#F7FAFF" roughness={0.55} />
-        </RoundedBox>
       </Float>
     </group>
   );
