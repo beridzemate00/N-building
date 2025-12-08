@@ -1,74 +1,61 @@
-# React + TypeScript + Vite
+# N-building — Renovation & Home Services (Full Stack) v2
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A lightweight full-stack website for **N-building** focused on:
+- Painting
+- Plastering & surface repair
+- Removing/adjusting walls
+- Door repairs
+- Electrical
+- Plumbing
 
-Currently, two official plugins are available:
+Design: clean **blue/white**, modern, fast-loading, with a lightweight 3D hero.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## v2 adds
+- Language switcher: **English / ქართული / Русский** (no heavy i18n library)
+- Improved Projects gallery with tag filters
+- Floating quick-contact buttons (Phone + WhatsApp placeholders)
+- Tiny Admin page to view contact requests (demo token-based)
 
-## React Compiler
+## Tech
+- Frontend: React + Vite + TypeScript + Tailwind, Framer Motion, React Router
+- 3D: @react-three/fiber + drei
+- Backend: Express + TypeScript + Zod
+- Storage: In-memory (upgrade to DB later)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Quick start
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### Backend
+```bash
+cd backend
+cp .env.example .env
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### Frontend
+```bash
+cd ../frontend
+cp .env.example .env
+npm install
+npm run dev
 ```
-# N-building
+
+Open:
+- Frontend: http://localhost:5173
+- API health: http://localhost:5000/health
+- Admin page: http://localhost:5173/admin
+
+## Admin (demo)
+- Backend checks `ADMIN_TOKEN` (default `demo-admin`).
+- Frontend uses `VITE_ADMIN_TOKEN` to access the admin endpoint.
+
+This is a lightweight demo mechanism. For production, use proper authentication.
+
+## Customize
+Update these placeholders:
+- `frontend/src/config/brand.ts`
+  - phone number
+  - WhatsApp number
+  - service areas
+- `backend/src/data/projects.ts`
+  - real projects & фото
