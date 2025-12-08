@@ -3,7 +3,7 @@ import { useFrame } from "@react-three/fiber";
 import { Float, RoundedBox } from "@react-three/drei";
 
 export function RotatingCluster() {
-  const group = useRef<any>(null);
+  const group = useRef<import("three").Group | null>(null);
 
   useFrame((_, delta) => {
     if (group.current) group.current.rotation.y += delta * 0.18;
