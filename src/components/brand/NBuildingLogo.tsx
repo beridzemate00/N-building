@@ -1,5 +1,4 @@
-import { useI18n } from "../../i18n/I18nContext";
-
+import { useI18n } from "../../i18n/useI18n";
 export function NBuildingLogo({ size = 28 }: { size?: number }) {
   const { c } = useI18n();
 

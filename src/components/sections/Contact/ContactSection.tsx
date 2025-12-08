@@ -7,8 +7,7 @@ import { Toast, type ToastState } from "../../common/Toast";
 
 import { buildWhatsAppLink } from "../../../utils/whatsapp";
 import { canSendEmail, sendQuoteEmail } from "../../../utils/emailjs";
-import { useI18n } from "../../../i18n/I18nContext";
-
+import { useI18n } from "../../../i18n/useI18n";
 function isEmail(v: string) {
   return /\S+@\S+\.\S+/.test(v);
 }

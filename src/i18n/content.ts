@@ -1,7 +1,104 @@
 export type Lang = "en" | "ka" | "ru";
 export type CategoryKey = "residential" | "commercial" | "industrial";
 
-const EN = {
+// small helper types (clean & reusable)
+export type NavItem = { id: string; label: string };
+export type StatItem = { label: string; value: string };
+export type ServiceItem = { title: string; text: string; bullets: string[] };
+export type ProjectItem = { name: string; category: CategoryKey; note: string };
+export type TestimonialItem = { name: string; role: string; text: string };
+export type ProcessStep = { title: string; text: string };
+export type SectionBlock = { eyebrow: string; title: string; subtitle: string };
+
+export type Content = {
+  brand: {
+    name: string;
+    subtitle: string;
+    tagline: string;
+    locationShort: string;
+  };
+
+  nav: NavItem[];
+
+  hero: {
+    headline: string;
+    description: string;
+    primaryCta: string;
+    secondaryCta: string;
+    safetyTitle: string;
+    safetyText: string;
+    hint3d: string;
+  };
+
+  stats: StatItem[];
+
+  sections: {
+    services: SectionBlock;
+    projects: SectionBlock;
+    testimonials: SectionBlock;
+    about: SectionBlock;
+    process: SectionBlock;
+    contact: SectionBlock;
+  };
+
+  services: ServiceItem[];
+
+  categories: {
+    all: string;
+    residential: string;
+    commercial: string;
+    industrial: string;
+  };
+
+  projects: ProjectItem[];
+  testimonials: TestimonialItem[];
+
+  about: {
+    p1: string;
+    p2: string;
+    bullets: string[];
+  };
+
+  process: ProcessStep[];
+
+  contact: {
+    phone: string;
+    email: string;
+    address: string;
+    placeholders: {
+      name: string;
+      contact: string;
+      desc: string;
+    };
+    projectTypes: string[];
+    demoNote: string;
+    mapNote: string;
+  };
+
+  footer: {
+    contactLabel: string;
+    rights: string;
+  };
+
+  quoteModal: {
+    eyebrow: string;
+    title: string;
+    subtitle: string;
+    placeholders: {
+      name: string;
+      contact: string;
+      desc: string;
+    };
+    projectTypeLabel: string;
+    budgetLabel: string;
+    budgets: string[];
+    submit: string;
+    demoNote: string;
+  };
+};
+
+// ---------------- EN ----------------
+const EN: Content = {
   brand: {
     name: "N-building",
     subtitle: "CONSTRUCTION",
@@ -109,17 +206,17 @@ const EN = {
   projects: [
     {
       name: "Coastal Residence",
-      category: "residential" as CategoryKey,
+      category: "residential",
       note: "Modern villa concept with durable materials and clean geometry.",
     },
     {
       name: "City Retail Fitout",
-      category: "commercial" as CategoryKey,
+      category: "commercial",
       note: "Brand-first interior layout optimized for customer flow.",
     },
     {
       name: "Logistics Hub",
-      category: "industrial" as CategoryKey,
+      category: "industrial",
       note: "Structural + infrastructure planning for long-term performance.",
     },
   ],
@@ -175,12 +272,7 @@ const EN = {
       contact: "Phone or email",
       desc: "Tell us about your project",
     },
-    projectTypes: [
-      "Residential",
-      "Commercial",
-      "Industrial",
-      "Renovation",
-    ],
+    projectTypes: ["Residential", "Commercial", "Industrial", "Renovation"],
     demoNote: "Demo only — no backend connected yet.",
     mapNote: "Placeholder for map embed",
   },
@@ -205,11 +297,10 @@ const EN = {
     submit: "Send request",
     demoNote: "Demo UI only — no data is sent.",
   },
-} as const;
+};
 
-export type ContentShape = typeof EN;
-
-const KA: ContentShape = {
+// ---------------- KA ----------------
+const KA: Content = {
   brand: {
     name: "N-building",
     subtitle: "მშენებლობა",
@@ -277,8 +368,7 @@ const KA: ContentShape = {
     contact: {
       eyebrow: "კონტაქტი",
       title: "დავიწყოთ თქვენი პროექტი",
-      subtitle:
-        "ფრონტენდი + WhatsApp/EmailJS — ბექენდი სურვილისამებრ.",
+      subtitle: "ფრონტენდი + WhatsApp/EmailJS — ბექენდი სურვილისამებრ.",
     },
   },
 
@@ -324,7 +414,8 @@ const KA: ContentShape = {
     {
       name: "ლოგისტიკური ჰაბი",
       category: "industrial",
-      note: "კონსტრუქციული და ინფრასტრუქტურული გადაწყვეტები ხანგრძლივი გამოყენებისთვის.",
+      note:
+        "კონსტრუქციული და ინფრასტრუქტურული გადაწყვეტები ხანგრძლივი გამოყენებისთვის.",
     },
   ],
 
@@ -406,7 +497,8 @@ const KA: ContentShape = {
   },
 };
 
-const RU: ContentShape = {
+// ---------------- RU ----------------
+const RU: Content = {
   brand: {
     name: "N-building",
     subtitle: "СТРОИТЕЛЬСТВО",
@@ -474,8 +566,7 @@ const RU: ContentShape = {
     contact: {
       eyebrow: "Контакты",
       title: "Давайте обсудим ваш проект",
-      subtitle:
-        "Фронтенд + WhatsApp/EmailJS — бэкенд при необходимости.",
+      subtitle: "Фронтенд + WhatsApp/EmailJS — бэкенд при необходимости.",
     },
   },
 
@@ -511,7 +602,8 @@ const RU: ContentShape = {
     {
       name: "Прибрежная резиденция",
       category: "residential",
-      note: "Концепт современной виллы с прочными материалами и чистой геометрией.",
+      note:
+        "Концепт современной виллы с прочными материалами и чистой геометрией.",
     },
     {
       name: "Городской ритейл",
@@ -603,7 +695,7 @@ const RU: ContentShape = {
   },
 };
 
-export const CONTENT: Record<Lang, ContentShape> = {
+export const CONTENT: Record<Lang, Content> = {
   en: EN,
   ka: KA,
   ru: RU,
