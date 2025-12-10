@@ -33,6 +33,10 @@ contactRouter.post("/", (req, res) => {
 
   messages.push(newMsg);
 
+  console.log("--- New Quote Received ---");
+  console.log(newMsg);
+  console.log("--------------------------");
+
   return res.status(201).json({ ok: true, id: newMsg.id });
 });
 
